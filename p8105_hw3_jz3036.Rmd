@@ -25,15 +25,6 @@ data_p3 =
   janitor::clean_names(brfss_smart2010) %>%
   filter(., topic == 'Overall Health') %>%
   filter(., response == 'Poor' | response == 'Fair' | response == 'Good' | response == 'Very good' | response == 'Excellent') %>%
-  count(response)
-  group_by(response) %>%
-  summarize(n = n())
-
-
-
-
-arrange(., response)
-typeof(data_p3$response)
-unique(data_p3$response)
+  mutate(., response = factor(response, levels = str_c(c("Excellent", "Very good", "Good", "Fair", "Poor")))) %>% 
 ```
 
