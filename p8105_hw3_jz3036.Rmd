@@ -1,0 +1,39 @@
+---
+title: "p8105_hw3_jz3036"
+output: github_document
+author: "Junyuan Zheng (jz3036)"
+date: 2018-10-10
+---
+
+* Import necessary packages.
+```{r import_packages}
+library(tidyverse)
+#library(readxl)
+```
+
+# Problem 1
+
+* Import the raw data for Problem 1.
+```{r data_import_p1}
+library(p8105.datasets)
+data(brfss_smart2010)
+```
+
+* Data manipulation:
+```{r data_manipulation}
+data_p3 = 
+  janitor::clean_names(brfss_smart2010) %>%
+  filter(., topic == 'Overall Health') %>%
+  filter(., response == 'Poor' | response == 'Fair' | response == 'Good' | response == 'Very good' | response == 'Excellent') %>%
+  count(response)
+  group_by(response) %>%
+  summarize(n = n())
+
+
+
+
+arrange(., response)
+typeof(data_p3$response)
+unique(data_p3$response)
+```
+
