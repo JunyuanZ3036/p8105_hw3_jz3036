@@ -20,11 +20,33 @@ data(brfss_smart2010)
 ```
 
 * Data manipulation:
-```{r data_manipulation}
-data_p3 = 
+```{r data_manipulation_p1}
+data_p1 = 
   janitor::clean_names(brfss_smart2010) %>%
   filter(., topic == 'Overall Health') %>%
   filter(., response == 'Poor' | response == 'Fair' | response == 'Good' | response == 'Very good' | response == 'Excellent') %>%
-  mutate(., response = factor(response, levels = str_c(c("Excellent", "Very good", "Good", "Fair", "Poor")))) %>% 
+  mutate(., response = factor(response, levels = str_c(c("Excellent", "Very good", "Good", "Fair", "Poor"))))
+```
+
+* Q1 In 2002, which states were observed at 7 locations?
+```{r p1_q1}
+data_p1_q1 = 
+  filter(data_p1, year == '2002') %>% 
+  group_by(., locationabbr) %>% 
+  summarize(., n_loc = n_distinct(locationdesc)) %>% 
+  filter(., n_loc == 7)
+data_p1_q1
+```
+CT, FL, and NC were observed at 7 locations.
+
+* Q2 Make a “spaghetti plot” that shows the number of locations in each state from 2002 to 2010.
+```{r p1_q2}
+data_p1 %>% 
+  group_by(., year, locationabbr) %>% 
+  summarize(., n_loc = n_distinct(locationdesc)) %>% 
+  ggplot(aes(x = year, y = n_loc, color = locationabbr)) +
+    geom_point() + geom_line() + 
+    theme(legend.position = "bottom", plot.title = element_text(hjust = 0.5)) +
+    labs(y = 'number of loc', color = 'states', title = 'spaghetti plot')
 ```
 
