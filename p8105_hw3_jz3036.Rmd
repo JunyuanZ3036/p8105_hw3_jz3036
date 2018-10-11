@@ -50,3 +50,37 @@ data_p1 %>%
     labs(y = 'number of loc', color = 'states', title = 'spaghetti plot')
 ```
 
+* Q3 Make a table showing, for the years 2002, 2006, and 2010, the mean and standard deviation of the proportion of “Excellent” responses across locations in NY State.
+```{r p1_q3}
+data_p1 %>%
+  filter(., year=='2002' | year=='2006' | year=='2010', response=='Excellent') %>% 
+  group_by(., year) %>% 
+  summarize(., mean = mean(data_value, na.rm = TRUE), SD = sd(data_value, na.rm = TRUE))
+```
+
+* Q4 For each year and state, compute the average proportion in each response category (taking the average across locations in a state).
+```{r p1_q4_1}
+data_p1_q4_1 = 
+  group_by(data_p1, year, locationabbr) %>% 
+  summarize(., n_loc = n_distinct(locationdesc))
+
+data_p1_q4_2 =
+  group_by(data_p1, year, locationabbr, response) %>%
+  summarize(., mean_sum = sum(data_value))
+
+data_p1_q4 = left_join(data_p1_q4_2, data_p1_q4_1, by = c('year'='year', 'locationabbr'='locationabbr'))
+
+data_p1_q4 = mutate(data_p1_q4, avg_prop = mean_sum/n_loc)
+```
+
+* Make a five-panel plot that shows, for each response category separately, the distribution of these state-level averages over time.
+```{r p1_q4_2}
+ggplot(data_p1_q4, aes(x = year, y = avg_prop, color = locationabbr)) +
+    geom_point() + geom_line() +
+    facet_grid(. ~ response) +
+    theme(legend.position = "right", plot.title = element_text(hjust = 0.5),
+          axis.text.x = element_text(angle=90)) +
+    labs(y = 'avg_prop', color = 'states', title = 'state-level averages over time')
+```
+
+# Problem 2
