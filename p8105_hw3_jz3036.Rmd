@@ -71,7 +71,7 @@ data_p1_q4_2 =
 data_p1_q4 = left_join(data_p1_q4_2, data_p1_q4_1, by = c('year'='year', 'locationabbr'='locationabbr'))
 
 data_p1_q4 = mutate(data_p1_q4, avg_prop = mean_sum/n_loc)
-data_p1_q4
+head(data_p1_q4)
 ```
 
 * Make a five-panel plot that shows, for each response category separately, the distribution of these state-level averages over time.
