@@ -85,3 +85,33 @@ ggplot(data_p1_q4, aes(x = year, y = avg_prop, color = locationabbr)) +
 ```
 
 # Problem 2
+
+* Import the raw data for Problem 2.
+```{r data_import_p2}
+library(p8105.datasets)
+data(instacart)
+data_p2 = instacart
+```
+
+* write a short description of the dataset, noting the size and structure of the data, describing some key variables, and giving illstrative examples of observations. 
+
+* This is a subset of a dataset containing online purchase information for each order. The dataset we are using contains `r dim(data_p2)[1]` rows or purchase of goods, and `r dim(data_p2)[2]` variables for each purchase.
+* The variables can be roughly separated into three parts: cumtomer info, goods info, and time info. Variables that could potientially provides useful infomation include the reordered info, order time of the week and the day, and the aisle info.
+* For example, the plot below told us people tend to order yogurt on Sunday more, less on the middle of the week.
+
+```{r p2_example}
+data_p2 %>%
+  filter(., aisle == 'yogurt') %>% 
+  group_by(., order_dow) %>% 
+  summarize(., n = n()) %>% 
+  ggplot(., aes(x = order_dow, y = n)) +
+    geom_point() + geom_line() +
+    labs(y = '# of orders', x = 'day of a week', title = 'yogurt order trend')
+```
+
+
+* Q1 How many aisles are there, and which aisles are the most items ordered from?
+```{r p2_q1}
+
+```
+
