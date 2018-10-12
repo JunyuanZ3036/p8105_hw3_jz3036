@@ -137,6 +137,23 @@ Also, the 95th and 96th ranking was tied, so there is a adding up on the plot.
 
 * Q3 Make a table showing the most popular item in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”.
 ```{r p2_q3}
+data_p2_q3 =
+  filter(data_p2, aisle == 'baking ingredients' | aisle == 'dog food care' | aisle == 'packaged vegetables fruits') %>% 
+  group_by(., aisle, product_name) %>% 
+  summarize(n = n()) %>% 
+  mutate(ranking = min_rank(desc(n))) %>% 
+  filter(., ranking == 1) %>% 
+  select(., aisle, product_name)
+data_p2_q3
+```
 
+* Q4 Make a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; format this table for human readers (i.e. produce a 2 x 8 table).
+```{r p2_q4}
+data_p2_q4 = 
+  filter(data_p2, product_name == 'Pink Lady Apples' | product_name == 'Coffee Ice Cream') %>% 
+  group_by(., product_name, order_dow) %>% 
+  summarize(., mean_hour = mean(order_hour_of_day)) %>% 
+  spread(., key = order_dow, value = mean_hour)
+data_p2_q4  
 ```
 
