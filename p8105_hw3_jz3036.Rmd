@@ -112,6 +112,31 @@ data_p2 %>%
 
 * Q1 How many aisles are there, and which aisles are the most items ordered from?
 ```{r p2_q1}
+data_p2_q1 =
+  group_by(data_p2, aisle) %>%
+  summarize(., n = n()) %>% 
+  mutate(aisle_ranking = min_rank(desc(n)))
+
+nrow(data_p2_q1)
+filter(data_p2_q1, aisle_ranking == 1)
+```
+There are `r nrow(data_p2_q1)` different aisles there, in which fresh vegetables are the aisle most ordered from.
+
+* Q2 Make a plot that shows the number of items ordered in each aisle. Order aisles sensibly, and organize your plot so others can read it.
+```{r p2_q2}
+data_p2_q1 = arrange(data_p2_q1, desc(n))
+ggplot(data=data_p2_q1, aes(x=aisle_ranking, y=n, fill = factor(aisle, levels = aisle))) +
+  geom_bar(stat="identity", position = "dodge") +
+  scale_x_continuous(breaks = seq(0, 140, by = 20)) +
+  scale_y_continuous(breaks = seq(0, 150000, by = 10000)) +
+  labs(y = 'number of items ordered', x = 'ranking of items ordered', fill = 'aisles') +
+  theme(legend.position = "none", legend.key.size = unit(0.01, 'line'))
+```
+The legend that is mean to guide finding corresponding aisle is too large, so I didn't print it out here.
+Also, the 95th and 96th ranking was tied, so there is a adding up on the plot.
+
+* Q3 Make a table showing the most popular item in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”.
+```{r p2_q3}
 
 ```
 
