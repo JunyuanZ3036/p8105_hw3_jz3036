@@ -157,3 +157,47 @@ data_p2_q4 =
 data_p2_q4  
 ```
 
+# Problem 3
+
+* Import the raw data for Problem 3.
+```{r data_import_p3}
+library(p8105.datasets)
+data(ny_noaa)
+data_p3 = ny_noaa
+```
+
+* write a short description of the dataset, noting the size and structure of the data, describing some key variables, and indicating the extent to which missing data is an issue.
+
+* This dataset contains data from weather stations located at NYC region. It contains `r dim(data_p3)[1]` rows or observations, and `r dim(data_p3)[2]` variables for each observation.
+* Important variables include Precipatation, Snowfall, Snow depth, max and min temperature.
+* A lot of the observation in this dataset have missing value, which could be annoying since a lot of the time when we try to dig info from our data, we need all the variables to be available in each observation. One single missing value could make the one observation useless.
+
+* Q1-1 Do some data cleaning. Create separate variables for year, month, and day. Ensure observations for temperature, precipitation, and snowfall are given in reasonable units.
+
+```{r p3_q1-1}
+data_p3 = 
+  separate(data_p3, date, into = c("year", "month", "day"), sep = "-")
+data_p3$tmax = as.integer(data_p3$tmax) 
+data_p3$tmin = as.integer(data_p3$tmin)
+
+data_p3 = rename(data_p3, prcp_tenths_of_mm = prcp, snow_mm = snow, snwd_mm = snwd,
+       tmax_tenths_of_degrees_C = tmax, tmin_tenths_of_degrees_C = tmin)
+
+head(data_p3)
+```
+
+* Q1-2 For snowfall, what are the most commonly observed values? Why?
+```{r p3_q1-2}
+data_p3 %>%
+  group_by(., snow_mm) %>% 
+  summarize(., n = n()) %>% 
+  mutate(., ranking = min_rank(desc(n))) %>% 
+  filter(., ranking == 1)
+```
+* the most commonly observed snowfall value is 0, because no snowing is more common than snowing.
+
+* Q2 Make a two-panel plot showing the average max temperature in January and in July in each station across years. Is there any observable / interpretable structure? Any outliers?
+```{r p3_q2}
+
+```
+
